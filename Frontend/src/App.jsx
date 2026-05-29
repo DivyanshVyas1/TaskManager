@@ -1,34 +1,24 @@
-import React, { useState, useEffect } from "react";
-import TaskList from "./components/TaskList.jsx";
-import TaskForm from "./components/TaskForm.jsx";
-
-const API = "http://localhost:8000";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-
-  // Fetch tasks
-  const fetchTasks = async () => {
-    const res = await fetch(`${API}/tasks`);
-    const data = await res.json();
-    setTasks(data);
-  };
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
   return (
-    <div className="container mt-5">
-  <div className="card shadow p-4">
-    <h2 className="text-center mb-4"> Task Manager</h2>
-
-    <TaskForm fetchTasks={fetchTasks} />
-    <hr />
-    <TaskList tasks={tasks} fetchTasks={fetchTasks} />
-  </div>
-</div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
 export default App;
+

@@ -5,14 +5,15 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"task-manager/config"
 	"task-manager/routes"
 )
 
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
 		if r.Method == "OPTIONS" {
 			return
@@ -23,6 +24,8 @@ func enableCORS(next http.Handler) http.Handler {
 }
 
 func main() {
+	config.ConnectDB()
+
 	router := mux.NewRouter()
 	router.Use(enableCORS)
 
@@ -30,4 +33,4 @@ func main() {
 
 	fmt.Println("Server running on port 8000")
 	http.ListenAndServe(":8000", enableCORS(router))
-}
+}
