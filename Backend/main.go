@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"task-manager/config"
@@ -31,6 +32,11 @@ func main() {
 
 	routes.RegisterTaskRoutes(router)
 
-	fmt.Println("Server running on port 8000")
-	http.ListenAndServe(":8000", enableCORS(router))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	fmt.Printf("Server running on port %s\n", port)
+	http.ListenAndServe(":"+port, enableCORS(router))
 }
