@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/api/tasks');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/tasks`);
       setTasks(res.data || []);
     } catch (err) {
       console.error(err);
@@ -29,7 +29,7 @@ const Dashboard = () => {
 
   const fetchHeaders = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/api/headers');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/headers`);
       setHeaders(res.data || []);
     } catch (err) {
       console.error(err);

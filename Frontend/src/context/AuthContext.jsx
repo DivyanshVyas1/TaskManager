@@ -5,7 +5,8 @@ import axios from 'axios';
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   // Only attach token if the request is going to our backend
-  if (token && (config.url.startsWith('http://localhost:8000') || config.url.startsWith('/api'))) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  if (token && (config.url.startsWith(apiUrl) || config.url.startsWith('/api'))) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -17,7 +18,8 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
   response => response,
   error => {
-    const isBackendRequest = error.config && (error.config.url.startsWith('http://localhost:8000') || error.config.url.startsWith('/api'));
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const isBackendRequest = error.config && (error.config.url.startsWith(apiUrl) || error.config.url.startsWith('/api'));
     if (isBackendRequest && error.response && error.response.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -44,14 +46,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await axios.post('http://localhost:8000/api/login', { email, password });
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/login`, { email, password });
     localStorage.setItem('token', res.data.token);
     localStorage.setItem('user', JSON.stringify(res.data.user));
     setUser(res.data.user);
   };
 
   const register = async (username, email, password) => {
-    await axios.post('http://localhost:8000/api/register', { username, email, password });
+    await axios.post(`${import.meta.env.VITE_API_URL}/register`, { username, email, password });
   };
 
   const logout = () => {

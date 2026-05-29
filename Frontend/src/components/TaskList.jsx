@@ -6,7 +6,7 @@ const TaskList = ({ tasks, fetchTasks, headers }) => {
 
   const handleComplete = async (id) => {
     try {
-      await axios.put(`http://localhost:8000/api/tasks/${id}/complete`);
+      await axios.put(`${import.meta.env.VITE_API_URL}/tasks/${id}/complete`);
       fetchTasks();
     } catch (err) {
       console.error(err);
@@ -15,7 +15,7 @@ const TaskList = ({ tasks, fetchTasks, headers }) => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/tasks/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/tasks/${id}`);
       fetchTasks();
     } catch (err) {
       console.error(err);

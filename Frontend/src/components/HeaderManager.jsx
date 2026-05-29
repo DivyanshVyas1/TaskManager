@@ -29,7 +29,7 @@ const HeaderManager = ({ fetchHeaders, headers }) => {
     const validFields = fields.filter(f => f.name.trim() !== '');
 
     try {
-      await axios.post('http://localhost:8000/api/headers', {
+      await axios.post(`${import.meta.env.VITE_API_URL}/headers`, {
         name: headerName,
         fields: validFields
       });
@@ -45,7 +45,7 @@ const HeaderManager = ({ fetchHeaders, headers }) => {
   const handleDeleteHeader = async (id) => {
     if (!window.confirm('Are you sure? This will delete all items under this header too.')) return;
     try {
-      await axios.delete(`http://localhost:8000/api/headers/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/headers/${id}`);
       fetchHeaders();
     } catch (err) {
       console.error('Error deleting header:', err);
